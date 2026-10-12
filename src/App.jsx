@@ -3,6 +3,7 @@ import './App.css';
 import Summary from './components/Summary';
 import TransactionForm from './components/TransactionForm';
 import TransactionList from './components/TransactionList';
+import ConfirmationModal from './components/ConfirmationModal';
 
 function App() {
   const [transactions, setTransactions] = useState([
@@ -16,6 +17,9 @@ function App() {
     { id: 8, description: "Netflix", amount: "15", type: "expense", category: "entertainment", date: "2025-01-10" },
   ]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactionToDelete, setTransactionToDelete] = useState(null);
+
   const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
 
   const handleAddTransaction = (transaction) => {
@@ -27,6 +31,17 @@ function App() {
     setTransactions([...transactions, newTransaction]);
   };
 
+  const handleDeleteRequest = (id) => {
+    setTransactionToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    setTransactions(transactions.filter(t => t.id !== transactionToDelete));
+    setIsModalOpen(false);
+    setTransactionToDelete(null);
+  };
+
   return (
     <div className="app">
       <h1>Finance Tracker</h1>
@@ -36,7 +51,18 @@ function App() {
 
       <TransactionForm onAddTransaction={handleAddTransaction} categories={categories} />
 
-      <TransactionList transactions={transactions} categories={categories} />
+      <TransactionList
+        transactions={transactions}
+        categories={categories}
+        onDeleteRequest={handleDeleteRequest}
+      />
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        message="Are you sure you want to delete this transaction?"
+      />
     </div>
   );
 }
