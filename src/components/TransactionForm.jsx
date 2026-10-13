@@ -1,23 +1,32 @@
-import React from 'react';
+import { useState } from 'react';
 
-const TransactionForm = ({ onAddTransaction, categories }) => {
-  const [description, setDescription] = React.useState('');
-  const [amount, setAmount] = React.useState('');
-  const [category, setCategory] = React.useState('food');
-  const [type, setType] = React.useState('expense');
+function TransactionForm({ onAddTransaction, categories }) {
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("expense");
+  const [category, setCategory] = useState("food");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description || !amount) return;
-    onAddTransaction({ description, amount, category, type });
-    setDescription('');
-    setAmount('');
+
+    onAddTransaction({
+      description,
+      amount,
+      type,
+      category,
+    });
+
+    setDescription("");
+    setAmount("");
+    setType("expense");
+    setCategory("food");
   };
 
   return (
-    <div className="quick-entry">
-      <h2>Quick Entry</h2>
-      <form className="entry-form" onSubmit={handleSubmit}>
+    <div className="add-transaction">
+      <h2>Add Transaction</h2>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Description"
@@ -31,18 +40,18 @@ const TransactionForm = ({ onAddTransaction, categories }) => {
           onChange={(e) => setAmount(e.target.value)}
         />
         <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="expense">Expense</option>
           <option value="income">Income</option>
+          <option value="expense">Expense</option>
         </select>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(cat => (
-            <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+            <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
         <button type="submit">Add</button>
       </form>
     </div>
   );
-};
+}
 
 export default TransactionForm;

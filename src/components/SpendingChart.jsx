@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 
-// Midnight Gold Palette: High contrast, luxury tones
-const COLORS = ['#D4AF37', '#4ADE80', '#FB7185', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4'];
+// Fixed categorical palette for consistency and accessibility
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658'];
 
 const SpendingChart = ({ transactions }) => {
+  // Data transformation: Group expenses by category and sum their amounts
   const chartData = useMemo(() => {
     const expenses = transactions.filter(t => t.type === 'expense');
     const categoryTotals = expenses.reduce((acc, t) => {
@@ -29,32 +30,38 @@ const SpendingChart = ({ transactions }) => {
 
   return (
     <div className="spending-chart-container">
-      <h3 style={{ color: '#F8FAFC' }}>Spending by Category</h3>
+      <h3>Spending by Category</h3>
       <div style={{ width: '100%', height: 300 }}>
         <ResponsiveContainer>
           <BarChart
             data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1E293B" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
+              tick={{ fill: '#94a3b8', fontSize: 12 }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
+              tick={{ fill: '#94a3b8', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip
-              contentStyle={{ backgroundColor: '#161E31', borderColor: '#1E293B', color: '#F8FAFC' }}
-              cursor={{ fill: '#1E293B' }}
+              cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+              contentStyle={{
+                backgroundColor: '#1e293b',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#f1f5f9'
+              }}
+              itemStyle={{ color: '#f1f5f9' }}
               formatter={(value) => [`$${value.toFixed(2)}`, 'Amount']}
             />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '20px' }} />
             <Bar
               dataKey="value"
               name="Amount"

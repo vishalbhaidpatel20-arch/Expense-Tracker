@@ -48,19 +48,17 @@ function App() {
       <h1>Finance Tracker</h1>
       <p className="subtitle">Track your income and expenses</p>
 
-      <div className="ledger-sheet">
-        <Summary transactions={transactions} />
+      <Summary transactions={transactions} />
 
-        <SpendingChart transactions={transactions} />
+      <SpendingChart transactions={transactions} />
 
-        <TransactionForm onAddTransaction={handleAddTransaction} categories={categories} />
+      <TransactionForm onAddTransaction={handleAddTransaction} categories={categories} />
 
-        <TransactionList
-          transactions={transactions}
-          categories={categories}
-          onDeleteRequest={handleDeleteRequest}
-        />
-      </div>
+      <TransactionList
+        transactions={transactions}
+        categories={categories}
+        onDeleteRequest={handleDeleteRequest}
+      />
 
       <ConfirmationModal
         isOpen={isModalOpen}

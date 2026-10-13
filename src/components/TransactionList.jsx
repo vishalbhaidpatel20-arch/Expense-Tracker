@@ -1,61 +1,67 @@
-import React from 'react';
+import { useState } from 'react';
 
-const TransactionList = ({ transactions, categories, onDeleteRequest }) => {
-  const [typeFilter, setTypeFilter] = React.useState('all');
-  const [categoryFilter, setCategoryFilter] = React.useState('all');
+function TransactionList({ transactions, categories, onDeleteRequest }) {
+  const [filterType, setFilterType] = useState("all");
+  const [filterCategory, setFilterCategory] = useState("all");
 
-  const filteredTransactions = transactions.filter(t => {
-    const matchesType = typeFilter === 'all' || t.type === typeFilter;
-    const matchesCategory = categoryFilter === 'all' || t.category === categoryFilter;
-    return matchesType && matchesCategory;
-  });
+  let filteredTransactions = transactions;
+  if (filterType !== "all") {
+    filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
+  }
+  if (filterCategory !== "all") {
+    filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
+  }
 
   return (
-    <div className="transaction-section">
-      <h2>Recent Transactions</h2>
-      <div className="list-filters">
-        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+    <div className="transactions">
+      <h2>Transactions</h2>
+      <div className="filters">
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All Types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
           {categories.map(cat => (
-            <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+            <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
       </div>
-      <ul className="transaction-list">
-        {filteredTransactions.length === 0 ? (
-          <li className="transaction-item" style={{ justifyContent: 'center', color: '#888', fontStyle: 'italic' }}>
-            No transactions found
-          </li>
-        ) : (
-          filteredTransactions.map(t => (
-            <li key={t.id} className="transaction-item">
-              <div className="tx-details">
-                <span className="tx-desc">{t.description}</span>
-                <span className="tx-meta">{t.category} • {t.date}</span>
-              </div>
-              <div className="tx-amount-group">
-                <span className={`tx-amount ${t.type === 'income' ? 'income-text' : 'expense-text'}`}>
-                  {t.type === 'income' ? '+' : '-'}${parseFloat(t.amount).toFixed(2)}
-                </span>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredTransactions.map(t => (
+            <tr key={t.id}>
+              <td>{t.date}</td>
+              <td>{t.description}</td>
+              <td>{t.category}</td>
+              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
+                {t.type === "income" ? "+" : "-"}${t.amount}
+              </td>
+              <td>
                 <button
                   className="delete-btn"
                   onClick={() => onDeleteRequest(t.id)}
-                  title="Delete transaction"
                 >
-                  ✕
+                  Delete
                 </button>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
 export default TransactionList;
