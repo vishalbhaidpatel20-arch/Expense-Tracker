@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const ITEMS_PER_PAGE = 5;
 
 function TransactionList({ transactions, categories, onDeleteRequest }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterType, filterCategory]);
 
   let filteredTransactions = transactions;
   if (filterType !== "all") {
@@ -11,6 +18,10 @@ function TransactionList({ transactions, categories, onDeleteRequest }) {
   if (filterCategory !== "all") {
     filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
   }
+
+  const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="transactions">
@@ -40,7 +51,7 @@ function TransactionList({ transactions, categories, onDeleteRequest }) {
           </tr>
         </thead>
         <tbody>
-          {filteredTransactions.map(t => (
+          {paginatedTransactions.map(t => (
             <tr key={t.id}>
               <td>{t.date}</td>
               <td>{t.description}</td>
@@ -60,6 +71,28 @@ function TransactionList({ transactions, categories, onDeleteRequest }) {
           ))}
         </tbody>
       </table>
+
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            className="page-btn"
+            onClick={() => setCurrentPage(prev => prev - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span className="page-info">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            className="page-btn"
+            onClick={() => setCurrentPage(prev => prev + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
