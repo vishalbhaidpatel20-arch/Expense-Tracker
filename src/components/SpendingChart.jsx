@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 
-// Fixed categorical palette for consistency and accessibility
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658'];
+// Midnight Gold Palette: High contrast, luxury tones
+const COLORS = ['#D4AF37', '#4ADE80', '#FB7185', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4'];
 
 const SpendingChart = ({ transactions }) => {
-  // Data transformation: Group expenses by category and sum their amounts
   const chartData = useMemo(() => {
     const expenses = transactions.filter(t => t.type === 'expense');
     const categoryTotals = expenses.reduce((acc, t) => {
@@ -30,28 +29,29 @@ const SpendingChart = ({ transactions }) => {
 
   return (
     <div className="spending-chart-container">
-      <h3>Spending by Category</h3>
+      <h3 style={{ color: '#F8FAFC' }}>Spending by Category</h3>
       <div style={{ width: '100%', height: 300 }}>
         <ResponsiveContainer>
           <BarChart
             data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1E293B" />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
+              tick={{ fill: '#94A3B8', fontSize: 12 }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
+              tick={{ fill: '#94A3B8', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip
-              cursor={{ fill: '#f5f5f5' }}
+              contentStyle={{ backgroundColor: '#161E31', borderColor: '#1E293B', color: '#F8FAFC' }}
+              cursor={{ fill: '#1E293B' }}
               formatter={(value) => [`$${value.toFixed(2)}`, 'Amount']}
             />
             <Legend />
