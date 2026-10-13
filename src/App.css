@@ -9,6 +9,7 @@
   --radius-lg: 24px;
   --radius-md: 12px;
   --hover-bg: #334155;
+  --card-bg: #2a374a;
 }
 
 body {
@@ -53,7 +54,7 @@ h1 {
   flex: 1;
   border: 1px solid var(--border-soft);
   padding: 24px;
-  background: #2a374a;
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, background-color 0.2s ease;
@@ -93,7 +94,7 @@ h1 {
   border: 1px solid var(--border-soft);
   padding: 32px;
   margin-bottom: 32px;
-  background: #2a374a;
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -112,7 +113,7 @@ h1 {
   color: var(--text-secondary);
   border: 1px solid var(--border-soft);
   margin-bottom: 32px;
-  background: #2a374a;
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   font-style: italic;
 }
@@ -121,7 +122,7 @@ h1 {
   border: 1px solid var(--border-soft);
   padding: 32px;
   margin-bottom: 40px;
-  background: #2a374a;
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -147,7 +148,7 @@ form select {
   border: 1px solid #334155;
   border-radius: var(--radius-md);
   font-size: 14px;
-  background: #1e293b;
+  background: var(--surface);
   color: var(--text-primary);
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
@@ -239,7 +240,7 @@ thead th {
 
 tbody td {
   padding: 16px 12px;
-  background: #2a374a;
+  background: var(--card-bg);
   border-top: 1px solid var(--border-soft);
   border-bottom: 1px solid var(--border-soft);
   font-size: 14px;

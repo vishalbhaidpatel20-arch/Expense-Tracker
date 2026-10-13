@@ -1,8 +1,15 @@
 import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 
-// Fixed categorical palette for consistency and accessibility
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658'];
+// Muted, sophisticated palette that complements the semi-dark theme
+const COLORS = ['#60a5fa', '#34d399', '#fbbf24', '#f87171', '#a78bfa', '#fb923c', '#818cf8'];
+
+// Define theme constants to match CSS variables for the Tooltip
+const CHART_THEME = {
+  surface: '#1e293b',
+  text: '#f1f5f9',
+  border: 'rgba(255, 255, 255, 0.1)'
+};
 
 const SpendingChart = ({ transactions }) => {
   // Data transformation: Group expenses by category and sum their amounts
@@ -53,12 +60,12 @@ const SpendingChart = ({ transactions }) => {
             <Tooltip
               cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
               contentStyle={{
-                backgroundColor: '#1e293b',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: CHART_THEME.surface,
+                border: `1px solid ${CHART_THEME.border}`,
                 borderRadius: '12px',
-                color: '#f1f5f9'
+                color: CHART_THEME.text
               }}
-              itemStyle={{ color: '#f1f5f9' }}
+              itemStyle={{ color: CHART_THEME.text }}
               formatter={(value) => [`$${value.toFixed(2)}`, 'Amount']}
             />
             <Legend wrapperStyle={{ paddingTop: '20px' }} />
@@ -69,7 +76,7 @@ const SpendingChart = ({ transactions }) => {
               barSize={40}
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
               ))}
             </Bar>
           </BarChart>

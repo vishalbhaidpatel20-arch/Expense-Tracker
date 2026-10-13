@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -11,13 +11,16 @@ function TransactionList({ transactions, categories, onDeleteRequest }) {
     setCurrentPage(1);
   }, [filterType, filterCategory]);
 
-  let filteredTransactions = transactions;
-  if (filterType !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
-  }
-  if (filterCategory !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
-  }
+  const filteredTransactions = useMemo(() => {
+    let filtered = transactions;
+    if (filterType !== "all") {
+      filtered = filtered.filter(t => t.type === filterType);
+    }
+    if (filterCategory !== "all") {
+      filtered = filtered.filter(t => t.category === filterCategory);
+    }
+    return filtered;
+  }, [transactions, filterType, filterCategory]);
 
   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -40,37 +43,39 @@ function TransactionList({ transactions, categories, onDeleteRequest }) {
         </select>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedTransactions.map(t => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
-              </td>
-              <td>
-                <button
-                  className="delete-btn"
-                  onClick={() => onDeleteRequest(t.id)}
-                >
-                  Delete
-                </button>
-              </td>
+      <div style={{ overflowX: 'auto' }}>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {paginatedTransactions.map(t => (
+              <tr key={t.id}>
+                <td>{t.date}</td>
+                <td>{t.description}</td>
+                <td>{t.category}</td>
+                <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
+                  {t.type === "income" ? "+" : "-"}${t.amount}
+                </td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => onDeleteRequest(t.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {totalPages > 1 && (
         <div className="pagination">
